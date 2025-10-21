@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨ Примерочная - Винтажная одежда</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="theme-color" content="#ff6b9d">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+</head>
+<body>
+    <!-- Шапка приложения -->
+    <header class="header">
+        <div class="header-content">
+            <h1 class="logo">✨ Примерочная</h1>
+            <div class="header-actions">
+                <button class="btn-icon" id="searchBtn" title="Поиск">
+                    <span class="icon">🔍</span>
+                </button>
+                <button class="btn-icon favorites-btn" id="favoritesBtn" title="Избранное">
+                    <span class="icon">❤️</span>
+                    <span class="favorites-counter" id="favoritesCounter">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Основной контент -->
+    <main class="main">
+        <!-- Экран каталога -->
+        <div class="screen" id="catalogScreen">
+            <!-- Фильтры категорий -->
+            <div class="filters-bar">
+                <div class="filters-scroll">
+                    <button class="filter-btn active" data-category="all">Все товары</button>
+                    <button class="filter-btn" data-category="Платья">Платья</button>
+                    <button class="filter-btn" data-category="Блузки">Блузки</button>
+                    <button class="filter-btn" data-category="Рубашки">Рубашки</button>
+                    <button class="filter-btn" data-category="Футболки">Футболки</button>
+                    <button class="filter-btn" data-category="Юбки">Юбки</button>
+                    <button class="filter-btn" data-category="Верхняя одежда">Верхняя одежда</button>
+                    <button class="filters-modal-btn" id="filtersModalBtn">Фильтры</button>
+                </div>
+            </div>
+
+            <!-- Сетка товаров -->
+            <div class="products-grid" id="productsGrid">
+                <!-- Товары будут вставлены через JavaScript -->
+            </div>
+
+            <!-- Состояние загрузки -->
+            <div class="loading-skeleton" id="loadingSkeleton">
+                <div class="skeleton-item"></div>
+                <div class="skeleton-item"></div>
+                <div class="skeleton-item"></div>
+                <div class="skeleton-item"></div>
+            </div>
+
+            <!-- Пустое состояние -->
+            <div class="empty-state hidden" id="emptyState">
+                <div class="empty-icon">🔍</div>
+                <h3>Ничего не найдено</h3>
+                <p>Попробуйте изменить фильтры или выбрать другую категорию</p>
+            </div>
+        </div>
+
+        <!-- Экран детали товара -->
+        <div class="screen hidden" id="productScreen">
+            <div class="product-detail" id="productDetail">
+                <!-- Контент будет заполнен через JavaScript -->
+            </div>
+        </div>
+
+        <!-- Экран избранного -->
+        <div class="screen hidden" id="favoritesScreen">
+            <div class="favorites-header">
+                <h2>❤️ Избранное</h2>
+                <button class="btn btn--secondary btn--sm" id="clearFavoritesBtn">Очистить все</button>
+            </div>
+            <div class="favorites-grid" id="favoritesGrid">
+                <!-- Избранные товары -->
+            </div>
+            <div class="favorites-empty hidden" id="favoritesEmpty">
+                <div class="empty-icon">💕</div>
+                <h3>Пока ничего не добавлено</h3>
+                <p>Понравившиеся товары будут появляться здесь</p>
+                <button class="btn btn--primary" onclick="showScreen('catalog')">Перейти к каталогу</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Модальное окно фильтров -->
+    <div class="modal hidden" id="filtersModal">
+        <div class="modal-backdrop" onclick="closeModal('filtersModal')"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🎛 Фильтры</h3>
+                <button class="modal-close" onclick="closeModal('filtersModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="filter-section">
+                    <h4>💰 Цена</h4>
+                    <div class="price-range">
+                        <div class="price-inputs">
+                            <input type="number" placeholder="От" id="priceFrom" class="form-control">
+                            <span>—</span>
+                            <input type="number" placeholder="До" id="priceTo" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <h4>📏 Размеры</h4>
+                    <div class="size-filters">
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="XS" class="size-filter">
+                            <span>XS</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="S" class="size-filter">
+                            <span>S</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="M" class="size-filter">
+                            <span>M</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="L" class="size-filter">
+                            <span>L</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="XL" class="size-filter">
+                            <span>XL</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="XXL" class="size-filter">
+                            <span>XXL</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <h4>📦 Статус товара</h4>
+                    <div class="status-filters">
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="available" class="status-filter" checked>
+                            <span>В наличии</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="booked" class="status-filter" checked>
+                            <span>Забронированные</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="sold" class="status-filter">
+                            <span>Показать проданные</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn--secondary" onclick="resetFilters()">Сбросить</button>
+                <button class="btn btn--primary" onclick="applyFilters()">Применить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно бронирования -->
+    <div class="modal hidden" id="bookingModal">
+        <div class="modal-backdrop" onclick="closeModal('bookingModal')"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>💌 Бронирование</h3>
+                <button class="modal-close" onclick="closeModal('bookingModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="bookingForm">
+                    <div class="form-group">
+                        <label class="form-label">Ваше имя *</label>
+                        <input type="text" class="form-control" id="bookingName" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Телефон (необязательно)</label>
+                        <input type="tel" class="form-control" id="bookingPhone">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Комментарий (необязательно)</label>
+                        <textarea class="form-control" id="bookingComment" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="bookingAgree" required>
+                            <span>Согласен с условиями обработки данных</span>
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn--secondary" onclick="closeModal('bookingModal')">Отмена</button>
+                <button class="btn btn--primary" onclick="submitBooking()">Отправить запрос</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Уведомления -->
+    <div class="toast hidden" id="toast">
+        <div class="toast-content" id="toastContent"></div>
+    </div>
+
+    <!-- Подключение JavaScript -->
+    <script src="app.js"></script>
+</body>
+</html>
